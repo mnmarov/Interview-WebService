@@ -1,0 +1,190 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Self Hosted Web Service Status Page</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://www.jqueryscript.net/demo/Beautiful-JSON-Viewer-Editor/dist/jquery.json-editor.min.js"></script>
+
+    <script src="Utils.js"></script>
+    <script>
+        var g_TaskName = "TestOperation";
+
+        function dateTimeReviver(key, value) {
+            var a;
+            if (typeof value === 'string') {
+                if (value) {
+                    if (value.startsWith('/Date')) {
+                        a = value.substr(6);
+                        var intDt = parseInt(a);
+
+                        var now = new Date();
+                        var ofs = now.getTimezoneOffset();
+                        ofs = -(ofs * 60000); // ofs is in minutes so make is ms
+                        intDt += ofs;
+
+                        value = new Date(intDt);
+                        value = value.toISOString();
+                        console.log(value);
+                    }
+                }
+            }
+            return value;
+        }
+
+        function Status() {
+            var url = ComposeURL('Status');
+            ajax_request(url, "GET", null, function (result) {
+
+                try {
+                    var json_string = JSON.stringify(result, null, "  ");
+                    result = JSON.parse(json_string, dateTimeReviver)
+                    var editor = new JsonEditor('#json-display', result);
+                    editor.options.defaultCollapsed = true;
+                    editor.load(result);
+
+                    $('#json-display a:first-child')[0].click();
+                    //console.log($('#json-display a:first-child'));
+                } catch (e) {
+                    var json_string = JSON.stringify(result, null, "  ");
+                    $("#json-display").html(json_string);
+                }
+
+            });
+        }
+
+        function LogFile() {
+            var url = ComposeURL('LogFile');
+            ajax_request(url, "GET", null, function (result) {
+                //result = result.replace(, '<br>');
+                result = result.split('\r\n').join('<br>');
+                $("#content").html(result);
+            });
+        }
+
+        function GetExcutableMethods() {
+            var url = ComposeURL('GetExcutableMethods');
+            ajax_request(url, "GET", null, function (result) {
+                var sel_task = document.getElementById("select_task");
+                if (result) {
+                    if (result.Items) {
+                        for (var i in result.Items) {
+                            Method = result.Items[i];
+                            $("#select_task").append(new Option(Method));
+                        }
+                    }
+                }
+            });
+
+        }
+
+        function ExecuteSelected() {
+            var e = document.getElementById("xml_file");
+            g_TaskName = e.options[e.selectedIndex].text;
+            var url = ComposeURL('ExecuteTask');
+            if (!g_TaskName)
+                return;
+
+            var dataToSend = JSON.stringify(g_TaskName);
+
+            ajax_request(url, "POST", dataToSend, function (result) {
+                $("#content").html('Executing ');
+            });
+        }
+
+        function UploadFileText()
+        {
+            var url = ComposeURL('UploadText');
+            var xml_text = $("textarea").val();
+            var dataToSend = JSON.stringify(xml_text);
+            ajax_request(url, "POST", dataToSend, function (result) {
+                try {
+                    var json_string = JSON.stringify(result, null, "  ");
+                    result = JSON.parse(json_string, dateTimeReviver)
+                    var editor = new JsonEditor('#json-display', result);
+                    editor.options.defaultCollapsed = true;
+                    editor.load(result);
+
+                    $('#json-display a:first-child')[0].click();
+                    //console.log($('#json-display a:first-child'));
+                } catch (e) {
+                    var json_string = JSON.stringify(result, null, "  ");
+                    $("#json-display").html(json_string);
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            Token = getUrlParameter("Session-ID");
+            UserID = getUrlParameter("User-ID");
+            GetExcutableMethods();
+        });
+    </script>
+
+</head>
+<body>
+    <h1>Self Hosted Web Service Status Page</h1>
+    <p>Paste XML file contents here.</p>
+    <br />
+
+    <!--
+    <form action="http://localhost/TestWebService/Upload2">
+        <input type="file" name="request" value="request" multiple accept=".xml" />
+        <br />
+        <input type="submit" value="Upload XML File" />
+    </form>
+    <br />
+    -->
+
+    <textarea id="xml_file" name="xml_file" rows="4" cols="50">
+        <InputDocument>
+            <DeclarationList>
+                <Declaration Command="DEFAULT" Version="5.13">
+                    <DeclarationHeader>
+                        <Jurisdiction>IE</Jurisdiction>
+                        <CWProcedure>IMPORT</CWProcedure>
+                        <DeclarationDestination>CUSTOMSWAREIE</DeclarationDestination>
+                        <DocumentRef>71Q0019681</DocumentRef>
+                        <SiteID>DUB</SiteID>
+                        <AccountCode>G0779837</AccountCode>
+                    </DeclarationHeader>
+                </Declaration>
+            </DeclarationList>
+        </InputDocument>
+    </textarea>
+        <br />
+        <input type="button" value="Upload XML text" onclick="UploadFileText();" />
+
+        <br />
+        <br />
+        <br />
+        <input type="button" id="status-button" onclick='Status()' value="Status" />
+        <input type="button" id="status-button" onclick='LogFile()' value="Log File" />
+
+
+        <br />
+        <select id="select_task"></select>
+        <input type="button" id="status-button" onclick='ExecuteSelected()' value="Execute Selected" />
+        <br />
+        <table>
+            <tr>
+                <td>
+                    <h3>Status:</h3>
+                </td>
+                <td>
+                    <h3>Log File:</h3>
+                </td>
+            </tr>
+            <tr>
+                <td valign="top" style="width: 50%;">
+                    <div id="json-display"></div>
+                </td>
+                <td valign="top">
+                    <div id="content"></div>
+                </td>
+            </tr>
+        </table>
+</body>
+</html>

@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Self Hosted Web Service</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="Utils.js"></script>
+    <script>
+        function login() {
+            var data = { username: $("#username").val(), password: $("#password").val() };
+            login_request(data, function (result) {
+                if (result.Status == 0) {
+                    Token = result.Token;
+                    UserID = result.UserID;
+                    window.location.href = "StatusPage.html?Session-ID=" + Token + "&User-ID=" + UserID;
+                } else {
+                    alert(result.Message);
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Self Hosted Web Service</h1>
+    <p>Just click login security is turned off.</p>
+
+    <table>
+        <tr>
+            <td>Username:</td>
+            <td><input type="text" name="username" id="username" size="30" required="required" /></td>
+        </tr>
+        <tr>
+            <td>Password:</td>
+            <td><input type="password" name="password" id="password" size="30" required="required" /></td>
+        </tr>
+        <tr>
+            <td colspan="2" align="right"><input type="button" name="login" id="login" class="buttonStyle" value="Login" onclick="login();" /></td>
+        </tr>
+    </table>
+</body>
+</html>
