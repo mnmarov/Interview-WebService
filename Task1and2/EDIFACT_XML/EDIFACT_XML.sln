@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDIFACT_XML", "EDIFACT_XML.csproj", "{D0FF5F14-9E26-46F1-907C-DA9AA1C34091}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "..\UnitTests\UnitTests.csproj", "{535E4107-A768-42F6-90CF-6C66844E8C9B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D0FF5F14-9E26-46F1-907C-DA9AA1C34091}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0FF5F14-9E26-46F1-907C-DA9AA1C34091}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0FF5F14-9E26-46F1-907C-DA9AA1C34091}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0FF5F14-9E26-46F1-907C-DA9AA1C34091}.Release|Any CPU.Build.0 = Release|Any CPU
+		{535E4107-A768-42F6-90CF-6C66844E8C9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{535E4107-A768-42F6-90CF-6C66844E8C9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{535E4107-A768-42F6-90CF-6C66844E8C9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{535E4107-A768-42F6-90CF-6C66844E8C9B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
