@@ -1,14 +1,19 @@
 # Interview-WebService
 
 To open Task 1 and 2
+
 Task1and2\EDIFACT_XML\EDIFACT_XML.sln
 
 There are 2 methods:
+
 ParseEDIFACT and ParseReferences
+
 Both read the input files from the binary's location and output the result in the console.
 
 To open Task 3
+
 Task3\WebService\WebService.sln
+
 I am using a library I wrote a while back for a self hosted web service.
 It should work out of the box but if you have trouble starting it open visual studio as administrator.
 The security is disabled so just press login.
