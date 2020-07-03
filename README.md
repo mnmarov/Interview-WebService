@@ -28,7 +28,15 @@ Usage:
 You can modify the xml to see different result e.g. Command="DEFAULT1" will result in:
 
 "Message": "Invalid command specified.",
+
 "Status": -1
+
+The relevant code is in:
+
+WebService\TestWebService.cs 
+
+public WebServiceResponse Upload(XmlDocument request)
+ 
 
 
 
